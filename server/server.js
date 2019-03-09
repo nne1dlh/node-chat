@@ -14,14 +14,32 @@ app.use(xpress.static(publicPath));
 io.on('connection', (socket)=> {
     console.log('new user connected');
 
+    socket.emit('newMessage', {
+        from: 'Admin',
+        text: 'Welcome to chat app',
+        createdAt: new Date().getTime()
+    });
+
+    socket.broadcast.emit('newMessage', {
+        from: 'Admin',
+        text:'New user joined',
+        createdAt: new Date().getTime()
+    })
+
     socket.on('createMessage', (mess) => {
         console.log('createMessage', mess);
         io.emit('newMessage', {
             from: mess.from,
             text: mess.text,
             createdAt: new Date().getTime()
-        }) //emits event to every connection
-    })
+        }); //emits event to every connection
+    
+    // socket.broadcast.emit('newMessage', {
+    //     from: mess.from,
+    //     text: mess.text,
+    //     createdAt: new Date().getTime()
+    // });
+});
 
     socket.on('disconnect', () => {
         console.log('user was disconnected');
