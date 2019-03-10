@@ -6,7 +6,16 @@
     <body>
         <h2>Welcome to chat app piss</h2>
 
+        <ol id="messes"></ol>
+
+        <form id='mess-form'>
+            <input name="message" type="text" placeholder="Message"/>
+            <button>Send</button>
+
+        </form>
+
         <script src="/socket.io/socket.io.js"></script>
+        <script src="./libs/jquery-3.3.1.min.js"></script>
         <script src="/js/index.js"></script>
         
     </body>

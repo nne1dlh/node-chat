@@ -18,9 +18,10 @@ io.on('connection', (socket)=> {
 
     socket.broadcast.emit('newMessage', generateMessage('ADmin', 'New user joined chatters'));
 
-    socket.on('createMessage', (mess) => {
+    socket.on('createMessage', (mess, cb) => {
         console.log('createMessage', mess);
         io.emit('newMessage', generateMessage(mess.from, mess.text)); //emits event to every connection
+        cb('this is from server...');
     
     // socket.broadcast.emit('newMessage', {
     //     from: mess.from,
