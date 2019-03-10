@@ -2,7 +2,7 @@ const socketIO = require('socket.io');
 const path = require('path');
 const xpress = require('express');
 const http = require('http');
-
+const generateMessage = require('./utils/message').genMessage;
 var app = xpress();
 var serwer = http.createServer(app);
 var io = socketIO(serwer);
@@ -14,25 +14,13 @@ app.use(xpress.static(publicPath));
 io.on('connection', (socket)=> {
     console.log('new user connected');
 
-    socket.emit('newMessage', {
-        from: 'Admin',
-        text: 'Welcome to chat app',
-        createdAt: new Date().getTime()
-    });
+    socket.emit('newMessage', generateMessage('Admin', 'Welcome to chat app'));
 
-    socket.broadcast.emit('newMessage', {
-        from: 'Admin',
-        text:'New user joined',
-        createdAt: new Date().getTime()
-    })
+    socket.broadcast.emit('newMessage', generateMessage('ADmin', 'New user joined chatters'));
 
     socket.on('createMessage', (mess) => {
         console.log('createMessage', mess);
-        io.emit('newMessage', {
-            from: mess.from,
-            text: mess.text,
-            createdAt: new Date().getTime()
-        }); //emits event to every connection
+        io.emit('newMessage', generateMessage(mess.from, mess.text)); //emits event to every connection
     
     // socket.broadcast.emit('newMessage', {
     //     from: mess.from,
