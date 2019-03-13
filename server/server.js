@@ -3,6 +3,7 @@ const path = require('path');
 const xpress = require('express');
 const http = require('http');
 const generateMessage = require('./utils/message').genMessage;
+const generateLocationMessage = require('./utils/message').genLocMess;
 var app = xpress();
 var serwer = http.createServer(app);
 var io = socketIO(serwer);
@@ -21,14 +22,12 @@ io.on('connection', (socket)=> {
     socket.on('createMessage', (mess, cb) => {
         console.log('createMessage', mess);
         io.emit('newMessage', generateMessage(mess.from, mess.text)); //emits event to every connection
-        cb('this is from server...');
-    
-    // socket.broadcast.emit('newMessage', {
-    //     from: mess.from,
-    //     text: mess.text,
-    //     createdAt: new Date().getTime()
-    // });
-});
+        cb();
+    });
+
+    socket.on('createLocMess', (coords) => {
+        io.emit('newLocMessage', generateLocationMessage('Admin', coords.lat, coords.long));
+    });
 
     socket.on('disconnect', () => {
         console.log('user was disconnected');
