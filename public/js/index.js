@@ -14,17 +14,19 @@
     
     socket.on('newMessage', function(mess) {
         console.log("new message is :",mess);
+        var formTime = moment(mess.createdAt).format('h:mm a');
         var li = jQuery('<li></li>');
-        li.text(`${mess.from}: ${mess.text}`);
+        li.text(`${mess.from} ${formTime}: ${mess.text}`);
 
         jQuery('#messages').append(li);
     });
 
     socket.on('newLocMessage', function(message) {
+        var formTime = moment(message.createdAt).format('h:mm a');
         var li = jQuery('<li></li>');
         var a = jQuery('<a target="_blank">My current location</a>');
 
-        li.text(`${message.from}: `);
+        li.text(`${message.from} ${formTime}: `);
         a.attr('href', message.url);
         li.append(a);
         jQuery('#messages').append(li);
